@@ -49,23 +49,23 @@ defmodule Taggart.Mixfile do
       {:phoenix_html_helpers, "~> 1.0"},
 
       # docs
-      {:ex_doc, "~> 0.16.4", only: :dev, runtime: false},
-      {:earmark, "~> 1.2", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.34.2", only: :dev, runtime: false},
+      {:earmark, "~> 1.4", only: :dev, runtime: false},
 
       # converters
-      {:floki, "~> 0.17", optional: true},
+      {:floki, "~> 0.36", optional: true},
 
       # dev/test
       {:phoenix, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:benchee, "~> 0.9.0", only: [:dev, :test], runtime: false},
-      {:exprof, "~> 0.2.1", only: [:dev, :test], runtime: false},
+      {:benchee, "~> 1.3.1", only: [:dev, :test], runtime: false},
+      {:exprof, "~> 0.2.4", only: [:dev, :test], runtime: false},
       {:eflame,
        github: "ijcd/eflame", compile: "rebar3 compile", only: [:dev, :test], runtime: false},
-      {:mix_test_watch, "~> 0.3", only: [:dev, :test], runtime: false},
-      {:credo, "~> 0.8.5", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
-      {:stream_data, "~> 0.2.0", only: [:dev, :test], runtime: false},
-      #{:mex, "~> 0.0.5", only: [:dev, :test], runtime: false}
+      {:mix_test_watch, "~> 1.2", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:stream_data, "~> 1.1.1", only: [:dev, :test], runtime: false},
+      #{:mex, "~> 0.0.6", only: [:dev, :test], runtime: false}
     ]
   end
 
