@@ -10,6 +10,7 @@
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
           rebar3
+          inotify-tools # mix_test_watch
         ];
       };
     }
