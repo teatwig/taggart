@@ -55,7 +55,7 @@ defmodule Taggart.CLI do
             n = String.to_integer(n)
             String.duplicate(" ", n)
           rescue
-            ArgumentError -> raise "n must be an integer or \"tabs\" (see taggart --help)"
+            ArgumentError -> reraise "n must be an integer or \"tabs\" (see taggart --help)", __STACKTRACE__
           end
       end
 

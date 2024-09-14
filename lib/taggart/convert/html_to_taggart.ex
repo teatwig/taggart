@@ -67,10 +67,9 @@ defmodule Taggart.Convert.HTMLToTaggart do
   defp adjust_indent(str, indent) do
     str
     |> String.split("\n")
-    |> Enum.map(fn s ->
+    |> Enum.map_join("\n", fn s ->
       String.replace_leading(s, " ", indent)
     end)
-    |> Enum.join("\n")
   end
 
   defp escape_attr(attr) do
