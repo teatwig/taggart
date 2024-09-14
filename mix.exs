@@ -45,7 +45,8 @@ defmodule Taggart.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix_html, "~> 2.10"},
+      {:phoenix_html, "~> 4.1"},
+      {:phoenix_html_helpers, "~> 1.0"},
 
       # docs
       {:ex_doc, "~> 0.16.4", only: :dev, runtime: false},
@@ -55,7 +56,7 @@ defmodule Taggart.Mixfile do
       {:floki, "~> 0.17", optional: true},
 
       # dev/test
-      {:phoenix, "~> 1.3", only: [:dev, :test], runtime: false},
+      {:phoenix, "~> 1.7", only: [:dev, :test], runtime: false},
       {:benchee, "~> 0.9.0", only: [:dev, :test], runtime: false},
       {:exprof, "~> 0.2.1", only: [:dev, :test], runtime: false},
       {:eflame,

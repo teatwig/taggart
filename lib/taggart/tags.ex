@@ -200,7 +200,7 @@ defmodule Taggart.Tags do
         tag = unquote(tag)
 
         quote location: :keep do
-          Phoenix.HTML.Tag.tag(unquote(tag), unquote(attrs))
+          PhoenixHTMLHelpers.Tag.tag(unquote(tag), unquote(attrs))
         end
       end
     end
