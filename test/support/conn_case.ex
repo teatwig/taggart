@@ -17,7 +17,8 @@ defmodule Taggart.ConnCase do
 
   using do
     quote location: :keep do
-      use Phoenix.ConnTest
+      import Plug.Conn
+      import Phoenix.ConnTest
     end
   end
 

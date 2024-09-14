@@ -5,7 +5,7 @@ defmodule Taggart.Convert.HTMLToTaggart do
   @spec html_to_taggart(String.t, String.t, non_neg_integer()) :: String.t
   def html_to_taggart(html, indent \\ "  ", width \\ 1000) do
     html
-    |> Floki.parse()
+    |> Floki.parse_document!()
     |> to_taggart(1)
     |> IA.format(width)
     |> Enum.join
@@ -15,19 +15,19 @@ defmodule Taggart.Convert.HTMLToTaggart do
   defp to_taggart({tag, attrs, body}, indent) do
     call =
       case attrs do
-	[] -> tag
-	_ -> IA.surround("#{tag}(", attrs_doc(attrs), ")")
+        [] -> tag
+        _ -> IA.concat(["#{tag}(", IA.nest(attrs_doc(attrs), 1), ")"])
       end
 
     case body do
       [] ->
-	call
+        call
       _ ->
-	IA.nest((
-	  IA.glue(call, "do")
-	  |> IA.line(to_taggart(body, indent))
-	), indent)
-	|> IA.line("end")
+        IA.nest((
+          IA.glue(call, "do")
+          |> IA.line(to_taggart(body, indent))
+        ), indent)
+        |> IA.line("end")
     end
   end
 

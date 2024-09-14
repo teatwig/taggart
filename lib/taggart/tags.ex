@@ -125,8 +125,8 @@ defmodule Taggart.Tags do
           iex> #{tag}() do "content" end |> Phoenix.HTML.safe_to_string()
           "<#{tag}>content</#{tag}>"
 
-	  iex> #{tag}(nil, class: "foo") do "content" end |> Phoenix.HTML.safe_to_string()
-	  "<#{tag} class=\\"foo\\">content</#{tag}>"
+          iex> #{tag}(nil, class: "foo") do "content" end |> Phoenix.HTML.safe_to_string()
+          "<#{tag} class=\\"foo\\">content</#{tag}>"
 
       """
       defmacro unquote(tag)(content, attrs)
@@ -158,14 +158,14 @@ defmodule Taggart.Tags do
 
       # div/3
       defmacro unquote(tag)(_ignored, attrs, do: content) do
-      	tag = unquote(tag)
-      	content =
-      	  case content do
-      	    {:__block__, _, inner} -> inner
-      	    _ -> content
-      	  end
+        tag = unquote(tag)
+        content =
+          case content do
+            {:__block__, _, inner} -> inner
+            _ -> content
+          end
 
-      	Taggart.Tags.content_tag(tag, attrs, content)
+        Taggart.Tags.content_tag(tag, attrs, content)
       end
     end
   end
@@ -274,8 +274,8 @@ defmodule Taggart.Tags do
     Enum.reduce dict, acc, fn {k,v}, acc ->
       attr_name = "#{attr}-#{dasherize(k)}"
       case is_list(v) do
-	    true  -> nested_attrs(attr_name, v, acc)
-	    false -> [{attr_name, v}|acc]
+        true  -> nested_attrs(attr_name, v, acc)
+        false -> [{attr_name, v}|acc]
       end
     end
   end
