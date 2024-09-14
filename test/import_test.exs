@@ -10,11 +10,15 @@ defmodule TaggartUseTest do
   end
 
   test "taggart/0 should be avialable" do
-    assert "" == (taggart()) |> safe_to_string
+    assert "" == taggart() |> safe_to_string
   end
 
   test "taggart/1 should be avialable" do
-    assert "<asdf></asdf>" == (taggart do asdf() end) |> safe_to_string
+    assert "<asdf></asdf>" ==
+             (taggart do
+                asdf()
+              end)
+             |> safe_to_string
   end
 end
 
@@ -29,11 +33,15 @@ defmodule TaggartUseHTMLTest do
   end
 
   test "taggart/0 should be avialable" do
-    assert "" == (taggart()) |> safe_to_string
+    assert "" == taggart() |> safe_to_string
   end
 
   test "taggart/1 should be avialable" do
-    assert "<div></div>" == (taggart do div() end) |> safe_to_string
+    assert "<div></div>" ==
+             (taggart do
+                div()
+              end)
+             |> safe_to_string
   end
 end
 
@@ -50,11 +58,15 @@ defmodule TaggartImportHtmlTest do
   end
 
   test "taggart/0 should be avialable" do
-    assert "" == (taggart()) |> safe_to_string
+    assert "" == taggart() |> safe_to_string
   end
 
   test "taggart/1 should be avialable" do
-    assert "<div></div>" == (taggart do div() end) |> safe_to_string
+    assert "<div></div>" ==
+             (taggart do
+                div()
+              end)
+             |> safe_to_string
   end
 end
 
@@ -70,10 +82,14 @@ defmodule TaggartImportHtmlWithoutDivTest do
   end
 
   test "taggart/0 should be avialable" do
-    assert "" == (taggart()) |> safe_to_string
+    assert "" == taggart() |> safe_to_string
   end
 
   test "taggart/1 should be avialable" do
-    assert "<section></section>" == (taggart do section() end) |> safe_to_string
+    assert "<section></section>" ==
+             (taggart do
+                section()
+              end)
+             |> safe_to_string
   end
 end

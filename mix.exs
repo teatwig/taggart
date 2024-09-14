@@ -64,8 +64,8 @@ defmodule Taggart.Mixfile do
       {:mix_test_watch, "~> 1.2", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:stream_data, "~> 1.1.1", only: [:dev, :test], runtime: false},
-      #{:mex, "~> 0.0.6", only: [:dev, :test], runtime: false}
+      {:stream_data, "~> 1.1.1", only: [:dev, :test], runtime: false}
+      # {:mex, "~> 0.0.6", only: [:dev, :test], runtime: false}
     ]
   end
 

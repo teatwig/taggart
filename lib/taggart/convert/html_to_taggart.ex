@@ -2,13 +2,13 @@ defmodule Taggart.Convert.HTMLToTaggart do
   use Taggart.HTML
   alias Inspect.Algebra, as: IA
 
-  @spec html_to_taggart(String.t, String.t, non_neg_integer()) :: String.t
+  @spec html_to_taggart(String.t(), String.t(), non_neg_integer()) :: String.t()
   def html_to_taggart(html, indent \\ "  ", width \\ 1000) do
     html
     |> Floki.parse_document!()
     |> to_taggart(1)
     |> IA.format(width)
-    |> Enum.join
+    |> Enum.join()
     |> adjust_indent(indent)
   end
 
@@ -22,11 +22,13 @@ defmodule Taggart.Convert.HTMLToTaggart do
     case body do
       [] ->
         call
+
       _ ->
-        IA.nest((
+        IA.nest(
           IA.glue(call, "do")
-          |> IA.line(to_taggart(body, indent))
-        ), indent)
+          |> IA.line(to_taggart(body, indent)),
+          indent
+        )
         |> IA.line("end")
     end
   end
@@ -38,11 +40,11 @@ defmodule Taggart.Convert.HTMLToTaggart do
   defp to_taggart(tags, indent) when is_list(tags) do
     tags
     |> Enum.map(fn t -> to_taggart(t, indent) end)
-    |> IA.fold_doc(fn(doc, acc) -> IA.line(doc, acc) end)
+    |> IA.fold_doc(fn doc, acc -> IA.line(doc, acc) end)
   end
 
   defp to_taggart({:comment, comment}, _indent) do
-    "html_comment(#{inspect comment})"
+    "html_comment(#{inspect(comment)})"
   end
 
   defp to_taggart(text, _indent) when is_bitstring(text) do
@@ -50,17 +52,18 @@ defmodule Taggart.Convert.HTMLToTaggart do
   end
 
   defp attrs_doc([]), do: IA.empty()
+
   defp attrs_doc(attrs) do
     attrs
     |> Enum.map(&attr_doc/1)
-    |> IA.fold_doc(fn(doc, acc) -> IA.glue(doc, ", ", acc) end)
+    |> IA.fold_doc(fn doc, acc -> IA.glue(doc, ", ", acc) end)
   end
 
   defp attr_doc({attr, value}) do
     value = if attr == value, do: true, else: value
     attr = escape_attr(attr)
 
-    a = "#{attr}" |> String.to_atom |> Atom.to_string
+    a = "#{attr}" |> String.to_atom() |> Atom.to_string()
     IA.glue(a, ": ", inspect(value))
   end
 

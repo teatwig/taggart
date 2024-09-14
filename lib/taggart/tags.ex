@@ -1,4 +1,11 @@
 defmodule Taggart.Tags do
+  @moduledoc """
+  Define HTML tags.
+
+  Contains macros for creating a tag-based DSL.
+  """
+
+  @tag_prefixes [:aria, :data]
 
   @doc "See `taggart/1`"
   defmacro taggart() do
@@ -40,13 +47,15 @@ defmodule Taggart.Tags do
 
   """
   defmacro taggart(do: content) do
-    content = case content do
-      {:__block__, _, inner} -> inner
-      _ -> content
-    end
+    content =
+      case content do
+        {:__block__, _, inner} -> inner
+        _ -> content
+      end
 
     quote location: :keep, generated: true do
       content = unquote(content)
+
       case content do
         # monadically combine array of [{:safe, content}, ...] -> {:safe, [content, ...]}
         clist when is_list(clist) ->
@@ -55,20 +64,17 @@ defmodule Taggart.Tags do
               {:safe, inner} = c
               inner
             end
+
           {:safe, [inners]}
 
-        {:safe, _} = c -> c
+        {:safe, _} = c ->
+          c
 
-        c -> Phoenix.HTML.html_escape(c)
+        c ->
+          Phoenix.HTML.html_escape(c)
       end
     end
   end
-
-  @moduledoc """
-  Define HTML tags.
-
-  Contains macros for creating a tag-based DSL.
-  """
 
   @doc """
   Define a new tag.
@@ -83,23 +89,24 @@ defmodule Taggart.Tags do
   ```
   """
   defmacro deftag(tag) do
-    quote location: :keep, bind_quoted: [
-      tag: Macro.escape(tag, unquote: true)
-    ] do
-
+    quote location: :keep,
+          bind_quoted: [
+            tag: Macro.escape(tag, unquote: true)
+          ] do
       defmacro unquote(tag)(content_or_attrs \\ [])
 
       defmacro unquote(tag)(attrs)
-        when is_list(attrs)
-      do
-        tag = unquote(tag)  # push tag down to next quote
+               when is_list(attrs) do
+        # push tag down to next quote
+        tag = unquote(tag)
         {content, attrs} = Keyword.pop(attrs, :do, "")
 
         Taggart.Tags.normalized_call(tag, attrs, content)
       end
 
       defmacro unquote(tag)(content) do
-        tag = unquote(tag)  # push tag down to next quote
+        # push tag down to next quote
+        tag = unquote(tag)
         attrs = Macro.escape([])
 
         Taggart.Tags.normalized_call(tag, attrs, content)
@@ -130,8 +137,7 @@ defmodule Taggart.Tags do
 
       """
       defmacro unquote(tag)(content, attrs)
-        when not is_list(content)
-      do
+               when not is_list(content) do
         tag = unquote(tag)
 
         Taggart.Tags.normalized_call(tag, attrs, content)
@@ -140,6 +146,7 @@ defmodule Taggart.Tags do
       # Main method
       defmacro unquote(tag)(attrs, do: content) do
         tag = unquote(tag)
+
         content =
           case content do
             {:__block__, _, inner} -> inner
@@ -159,6 +166,7 @@ defmodule Taggart.Tags do
       # div/3
       defmacro unquote(tag)(_ignored, attrs, do: content) do
         tag = unquote(tag)
+
         content =
           case content do
             {:__block__, _, inner} -> inner
@@ -182,9 +190,10 @@ defmodule Taggart.Tags do
   ```
   """
   defmacro deftag(tag, void: true) do
-    quote location: :keep, bind_quoted: [
-      tag: Macro.escape(tag, unquote: true)
-    ] do
+    quote location: :keep,
+          bind_quoted: [
+            tag: Macro.escape(tag, unquote: true)
+          ] do
       @doc """
       Produce a void "#{tag}" tag.
 
@@ -225,33 +234,37 @@ defmodule Taggart.Tags do
     end
   end
 
-  @tag_prefixes [:aria, :data]
-
   def build_attrs(_tag, []), do: []
   def build_attrs(tag, attrs), do: build_attrs(tag, attrs, [])
 
   def build_attrs(_tag, [], acc),
-    do: acc |> Enum.sort |> tag_attrs
-  def build_attrs(tag, [{k, v}|t], acc) when k in @tag_prefixes and is_list(v) do
+    do: acc |> Enum.sort() |> tag_attrs
+
+  def build_attrs(tag, [{k, v} | t], acc) when k in @tag_prefixes and is_list(v) do
     build_attrs(tag, t, nested_attrs(dasherize(k), v, acc))
   end
-  def build_attrs(tag, [{k, true}|t], acc) do
-    build_attrs(tag, t, [{dasherize(k)}|acc])
-  end
-  def build_attrs(tag, [{_, false}|t], acc) do
-    build_attrs(tag, t, acc)
-  end
-  def build_attrs(tag, [{_, nil}|t], acc) do
-    build_attrs(tag, t, acc)
-  end
-  def build_attrs(tag, [{k, v}|t], acc) do
-    build_attrs(tag, t, [{dasherize(k), v}|acc])
+
+  def build_attrs(tag, [{k, true} | t], acc) do
+    build_attrs(tag, t, [{dasherize(k)} | acc])
   end
 
-  defp dasherize(value) when is_atom(value),   do: dasherize(Atom.to_string(value))
+  def build_attrs(tag, [{_, false} | t], acc) do
+    build_attrs(tag, t, acc)
+  end
+
+  def build_attrs(tag, [{_, nil} | t], acc) do
+    build_attrs(tag, t, acc)
+  end
+
+  def build_attrs(tag, [{k, v} | t], acc) do
+    build_attrs(tag, t, [{dasherize(k), v} | acc])
+  end
+
+  defp dasherize(value) when is_atom(value), do: dasherize(Atom.to_string(value))
   defp dasherize(value) when is_binary(value), do: String.replace(value, "_", "-")
 
   defp tag_attrs([]), do: []
+
   defp tag_attrs(attrs) do
     for a <- attrs do
       case a do
@@ -263,20 +276,24 @@ defmodule Taggart.Tags do
 
   defp attr_escape({:safe, data}),
     do: data
+
   defp attr_escape(nil),
     do: []
+
   defp attr_escape(other) when is_binary(other),
     do: Plug.HTML.html_escape(other)
+
   defp attr_escape(other),
     do: Phoenix.HTML.Safe.to_iodata(other)
 
   defp nested_attrs(attr, dict, acc) do
-    Enum.reduce dict, acc, fn {k,v}, acc ->
+    Enum.reduce(dict, acc, fn {k, v}, acc ->
       attr_name = "#{attr}-#{dasherize(k)}"
+
       case is_list(v) do
-        true  -> nested_attrs(attr_name, v, acc)
-        false -> [{attr_name, v}|acc]
+        true -> nested_attrs(attr_name, v, acc)
+        false -> [{attr_name, v} | acc]
       end
-    end
+    end)
   end
 end

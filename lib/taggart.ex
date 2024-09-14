@@ -21,20 +21,18 @@ defmodule Taggart do
     bar("some content")
   end
   ```
-
   """
-
 
   defmacro __using__(opts) do
     tags = Keyword.get(opts, :tags, [])
     void_tags = Keyword.get(opts, :void_tags, [])
 
-    quote location: :keep, bind_quoted: [
-      tags: tags,
-      void_tags: void_tags
-    ] do
-
-      import Taggart.Tags, only: [deftag: 1, deftag: 2]#, taggart: 0, taggart: 1]
+    quote location: :keep,
+          bind_quoted: [
+            tags: tags,
+            void_tags: void_tags
+          ] do
+      import Taggart.Tags, only: [deftag: 1, deftag: 2]
 
       # define normal tags
       for tag <- tags do

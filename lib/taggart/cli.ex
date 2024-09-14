@@ -12,11 +12,11 @@
 #  fi
 
 defmodule Taggart.CLI do
-  alias Taggart.Convert.HTMLToTaggart
-
   @moduledoc """
   Command line interface for Taggart
   """
+
+  alias Taggart.Convert.HTMLToTaggart
 
   def main(args) do
     args
@@ -25,7 +25,8 @@ defmodule Taggart.CLI do
   end
 
   defp parse_args(args) do
-    {flags, _args, _other} = OptionParser.parse(args, switches: [indent: :string, help: :boolean], aliases: [h: :help])
+    {flags, _args, _other} =
+      OptionParser.parse(args, switches: [indent: :string, help: :boolean], aliases: [h: :help])
 
     # set defaults
     flags = Keyword.put_new(flags, :indent, "2")
@@ -37,12 +38,15 @@ defmodule Taggart.CLI do
   end
 
   defp run(:help) do
-    Bunt.puts [:steelblue, """
-    taggart [--indent <n|tabs>] [--help]
+    Bunt.puts([
+      :steelblue,
+      """
+      taggart [--indent <n|tabs>] [--help]
 
-      --help    Show this message.
-      --indent  Either n (number of spaces to indent) or "tabs"
-    """]
+        --help    Show this message.
+        --indent  Either n (number of spaces to indent) or "tabs"
+      """
+    ])
   end
 
   defp run({:start, flags}) do
@@ -50,17 +54,19 @@ defmodule Taggart.CLI do
       case Keyword.get(flags, :indent) do
         "tabs" ->
           "\t"
+
         n ->
           try do
             n = String.to_integer(n)
             String.duplicate(" ", n)
           rescue
-            ArgumentError -> reraise "n must be an integer or \"tabs\" (see taggart --help)", __STACKTRACE__
+            ArgumentError ->
+              reraise "n must be an integer or \"tabs\" (see taggart --help)", __STACKTRACE__
           end
       end
 
     IO.read(:all)
     |> HTMLToTaggart.html_to_taggart(indent)
-    |> IO.puts
+    |> IO.puts()
   end
 end
