@@ -5,15 +5,15 @@ defmodule TaggartUseTest do
   use Taggart, tags: [:asdf]
   import Taggart.Tags, only: [taggart: 0, taggart: 1]
 
-  test "asdf should be avialable" do
+  test "asdf should be available" do
     assert "<asdf></asdf>" == asdf() |> safe_to_string()
   end
 
-  test "taggart/0 should be avialable" do
+  test "taggart/0 should be available" do
     assert "" == taggart() |> safe_to_string
   end
 
-  test "taggart/1 should be avialable" do
+  test "taggart/1 should be available" do
     assert "<asdf></asdf>" ==
              (taggart do
                 asdf()
@@ -28,15 +28,15 @@ defmodule TaggartUseHTMLTest do
 
   use Taggart.HTML
 
-  test "div/2 should be avialable" do
+  test "div/2 should be available" do
     assert "<div class=\"foo\">content</div>" == div("content", class: "foo") |> safe_to_string
   end
 
-  test "taggart/0 should be avialable" do
+  test "taggart/0 should be available" do
     assert "" == taggart() |> safe_to_string
   end
 
-  test "taggart/1 should be avialable" do
+  test "taggart/1 should be available" do
     assert "<div></div>" ==
              (taggart do
                 div()
@@ -53,15 +53,15 @@ defmodule TaggartImportHtmlTest do
   import Taggart.HTML
   import Taggart.Tags, only: [taggart: 0, taggart: 1]
 
-  test "div/2 should be avialable" do
+  test "div/2 should be available" do
     assert "<div class=\"foo\">content</div>" == div("content", class: "foo") |> safe_to_string
   end
 
-  test "taggart/0 should be avialable" do
+  test "taggart/0 should be available" do
     assert "" == taggart() |> safe_to_string
   end
 
-  test "taggart/1 should be avialable" do
+  test "taggart/1 should be available" do
     assert "<div></div>" ==
              (taggart do
                 div()
@@ -77,15 +77,15 @@ defmodule TaggartImportHtmlWithoutDivTest do
   import Taggart.HTML, except: [div: 2]
   import Taggart.Tags, only: [taggart: 0, taggart: 1]
 
-  test "Kernel.div/2 should be avialable" do
+  test "Kernel.div/2 should be available" do
     assert 3 == div(10, 3)
   end
 
-  test "taggart/0 should be avialable" do
+  test "taggart/0 should be available" do
     assert "" == taggart() |> safe_to_string
   end
 
-  test "taggart/1 should be avialable" do
+  test "taggart/1 should be available" do
     assert "<section></section>" ==
              (taggart do
                 section()

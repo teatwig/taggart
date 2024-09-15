@@ -280,9 +280,6 @@ defmodule Taggart.Tags do
   defp attr_escape(nil),
     do: []
 
-  defp attr_escape(other) when is_binary(other),
-    do: Plug.HTML.html_escape(other)
-
   defp attr_escape(other),
     do: Phoenix.HTML.Safe.to_iodata(other)
 
