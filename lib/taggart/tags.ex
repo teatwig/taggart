@@ -237,8 +237,9 @@ defmodule Taggart.Tags do
   def build_attrs(_tag, []), do: []
   def build_attrs(tag, attrs), do: build_attrs(tag, attrs, [])
 
-  def build_attrs(_tag, [], acc),
-    do: acc |> Enum.sort() |> tag_attrs
+  def build_attrs(_tag, [], acc) do
+    acc |> Enum.sort() |> tag_attrs
+  end
 
   def build_attrs(tag, [{k, v} | t], acc) when k in @tag_prefixes and is_list(v) do
     build_attrs(tag, t, nested_attrs(dasherize(k), v, acc))
@@ -279,6 +280,14 @@ defmodule Taggart.Tags do
 
   defp attr_escape(nil),
     do: []
+
+  # when passing a list to an attribue it gets joined with " "
+  # this is useful for setting multiple classes like: `class: ~w(first second)`
+  defp attr_escape(list) when is_list(list) do
+    # since this gets converted to IO data anyway it's cheaper to intersperse the joiner rather than
+    # calling Enum.join/2, which reverses the list after after joining and then converts it to binary
+    list |> Enum.intersperse(" ") |> Phoenix.HTML.Safe.to_iodata()
+  end
 
   defp attr_escape(other),
     do: Phoenix.HTML.Safe.to_iodata(other)

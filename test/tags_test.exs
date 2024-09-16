@@ -52,6 +52,29 @@ defmodule TagsTest do
              span(class: "attr", id: "bar") |> safe_to_string
   end
 
+  test "with list attributes" do
+    assert "<div class=\"one two\"></div>" == div(class: ["one", "two"]) |> safe_to_string
+    assert "<span class=\"one two\"></span>" == span(class: ["one", "two"]) |> safe_to_string
+
+    assert "<div class=\"one two\" id=\"bar\"></div>" ==
+             div(class: ["one", "two"], id: "bar") |> safe_to_string
+
+    assert "<span class=\"one two\" id=\"bar\"></span>" ==
+             span(class: ["one", "two"], id: "bar") |> safe_to_string
+  end
+
+  test "with word list attributes" do
+    assert "<div class=\"one two\"></div>" == div(class: ~w(one two)) |> safe_to_string
+    assert "<span class=\"one two\"></span>" == span(class: ~w(one two)) |> safe_to_string
+
+    assert "<div class=\"one two\" id=\"bar\"></div>" ==
+             div(class: ~w(one two), id: "bar") |> safe_to_string
+
+    assert "<span class=\"one two\" id=\"bar\"></span>" ==
+             span(class: ~w(one two), id: "bar") |> safe_to_string
+  end
+
+
   test "with content" do
     assert "<div>content</div>" == div("content") |> safe_to_string
     assert "<span>content</span>" == span("content") |> safe_to_string
