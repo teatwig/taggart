@@ -5,7 +5,7 @@ defmodule Taggart.Tags do
   Contains macros for creating a tag-based DSL.
   """
 
-  @tag_prefixes [:aria, :data]
+  @attr_prefixes [:aria, :data]
 
   @doc "See `taggart/1`"
   defmacro taggart() do
@@ -241,7 +241,7 @@ defmodule Taggart.Tags do
     acc |> Enum.sort() |> tag_attrs
   end
 
-  def build_attrs(tag, [{k, v} | t], acc) when k in @tag_prefixes and is_list(v) do
+  def build_attrs(tag, [{k, v} | t], acc) when k in @attr_prefixes and is_list(v) do
     build_attrs(tag, t, nested_attrs(dasherize(k), v, acc))
   end
 

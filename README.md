@@ -179,6 +179,20 @@ defmodule TaggartDemo.PageView do
 end
 ```
 
+### Using `aria-*` and `data-*` attributes
+
+There's a special syntax for `aria-*` and `data-*` attributes that allows to easily specify multiple with a keyword list.
+
+```elixir
+div(aria: [checked: false, label: "interactive div"])
+```
+
+will be rendered as
+
+```html
+<div aria-checked="false" aria-label="interactive div"></div>
+```
+
 ## A Note On Macro Expansion
 
 The current design allows for a very flexible call structure. However, do

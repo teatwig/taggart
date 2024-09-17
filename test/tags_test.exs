@@ -74,6 +74,21 @@ defmodule TagsTest do
              span(class: ~w(one two), id: "bar") |> safe_to_string
   end
 
+  test "with plain aria/data attributes" do
+    assert "<div aria=\"attr\"></div>" == div(aria: "attr") |> safe_to_string
+    assert "<div data=\"attr\"></div>" == div(data: "attr") |> safe_to_string
+  end
+
+  test "with named aria/data attributes" do
+    assert "<div aria-attr=\"one\"></div>" == div(aria: [attr: "one"]) |> safe_to_string
+    assert "<div data-attr=\"one\"></div>" == div(data: [attr: "one"]) |> safe_to_string
+
+    assert "<div aria-attr=\"one\" aria-foo-bar=\"two\"></div>" ==
+             div(aria: [attr: "one", foo_bar: "two"]) |> safe_to_string
+
+    assert "<div data-attr=\"one\" data-foo-bar=\"two\"></div>" ==
+             div(data: [attr: "one", foo_bar: "two"]) |> safe_to_string
+  end
 
   test "with content" do
     assert "<div>content</div>" == div("content") |> safe_to_string
