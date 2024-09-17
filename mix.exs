@@ -57,6 +57,7 @@ defmodule Taggart.Mixfile do
 
       # dev/test
       {:phoenix, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:phoenix_view, "~> 2.0", only: [:dev, :test], runtime: false},
       {:benchee, "~> 1.3.1", only: [:dev, :test], runtime: false},
       {:exprof, "~> 0.2.4", only: [:dev, :test], runtime: false},
       {:eflame,
