@@ -281,11 +281,13 @@ defmodule Taggart.Tags do
   defp attr_escape(nil),
     do: []
 
-  # when passing a list to an attribue it gets joined with " "
-  # this is useful for setting multiple classes like: `class: ~w(first second)`
+  # When passing a list to an attribue it gets joined with " ".
+  # This is useful for setting multiple classes like: `class: ~w(first second)`
+  # It is sensible to allow this for all attributes, since css has a special syntax for accessing
+  # white space-separated values. See: https://www.w3.org/TR/CSS2/selector.html#x16
   defp attr_escape(list) when is_list(list) do
-    # since this gets converted to IO data anyway it's cheaper to intersperse the joiner rather than
-    # calling Enum.join/2, which reverses the list after after joining and then converts it to binary
+    # Since this gets converted to IO data anyway it is cheaper to intersperse the joiner rather than
+    # calling Enum.join/2, which reverses the list after after joining and then converts it to binary.
     list |> Enum.intersperse(" ") |> Phoenix.HTML.Safe.to_iodata()
   end
 

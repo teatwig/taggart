@@ -179,6 +179,16 @@ defmodule TaggartDemo.PageView do
 end
 ```
 
+### Class names (and other white space-separated values)
+
+You can use a list if you want to specify multiple classes.
+
+```elixir
+span(class: ["highlighted", "aligh-right"])
+```
+
+This can be used on any attribute and will convert the list to a white space-separated value.
+
 ### Using `aria-*` and `data-*` attributes
 
 There's a special syntax for `aria-*` and `data-*` attributes that allows to easily specify multiple with a keyword list.
