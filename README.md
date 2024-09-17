@@ -39,7 +39,7 @@ other library that uses the same format.
 
 Taggart supports a number of different syntaxes:
 
-```
+```elixir
 use Taggart.HTML
 
 div("Name")
@@ -64,7 +64,7 @@ a(href: "#bottom", class: "uk-button uk-button-default", "i-am-a-boolean": true)
 
 You can nest and combine in expected ways:
 
-```
+```elixir
 use Taggart.HTML
 
 name = "Susan"
@@ -89,7 +89,7 @@ end
 You can embed Taggart inside Phoenix helpers using `Taggart.taggart/1`
 to create IO List without creating a top-level wrapping tag.
 
-```
+```elixir
 use Taggart.HTML
 
 form = form_for(conn, "/users", [as: :user], fn f ->
@@ -107,7 +107,7 @@ end)
 
 ### Using Phoenix Helpers
 
-```
+```elixir
 use Taggart.HTML
 
 html do
@@ -139,7 +139,7 @@ end
 Phoenix views are just functions, so it’s possible to use pattern
 matching directly in a view to render your pages.
 
-```
+```elixir
 defmodule TaggartDemo.PageView do
   use TaggartDemoWeb, :view
   use Taggart.HTML
@@ -186,7 +186,7 @@ not be tempted to think of these as normal functions. They are currently
 implemented as macros. This allows the `do end` blocks to processed as
 if they were a list:
 
-```
+```elixir
 div do
   "item 1"
   "item 2"
@@ -195,7 +195,7 @@ end
 
 The alternative would be forcing the use of actual lists, which is necessairly noisier.
 
-```
+```elixir
 # Not valid, do not try:
 div [
   "Item 1",
@@ -209,14 +209,14 @@ of ASTs.
 
 This will work:
 
-```
+```elixir
 # works
 a = "foo"
 div(a)
 ```
 
 This will not:
-```
+```elixir
 # do not try this at home
 a = [id: "foo", class: "bar"]
 div(a)
@@ -232,7 +232,7 @@ As a workaround, you can either use `Phoenix.HTML.content_tag`
 directly, or use the special three-argument version which
 ignores the first argument:
 
-```
+```elixir
 # try this
 a = [id: "foo", class: "bar"]
 div(nil, a) do "content" end
@@ -246,11 +246,11 @@ You can use the online tool at [prestochange.io](http://www.prestochange.io).
 
 ### Install taggart escript using homebrew
 
-```
+```sh
 brew install ijcd/tap/taggart
 ```
 
-```
+```elixir
 Reads HTML from stdin and writes Taggart to stdout.
 
 Usage:
@@ -264,7 +264,7 @@ Options:
 
 ### Build taggart escript from source
 
-```
+```sh
 mix escript.build
 ./taggart
 ```
