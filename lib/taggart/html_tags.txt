@@ -62,6 +62,7 @@ optgroup
 option
 output
 p
+picture
 pre
 progress
 q
