@@ -70,40 +70,38 @@ defmodule Taggart.HTML do
       "<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.1//EN\\" \\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\\">"
 
   """
-  defmacro html_doctype(type \\ :html5) do
-    quote location: :keep do
-      case unquote(type) do
-        :html5 ->
-          {:safe, "<!DOCTYPE html>"}
+  def html_doctype(type \\ :html5) do
+    case type do
+      :html5 ->
+        {:safe, "<!DOCTYPE html>"}
 
-        :html401_strict ->
-          {:safe,
-           ~s|<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">|}
+      :html401_strict ->
+        {:safe,
+         ~s|<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">|}
 
-        :html401_transitional ->
-          {:safe,
-           ~s|<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">|}
+      :html401_transitional ->
+        {:safe,
+         ~s|<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">|}
 
-        :html401_frameset ->
-          {:safe,
-           ~s|<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">|}
+      :html401_frameset ->
+        {:safe,
+         ~s|<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">|}
 
-        :xhtml10_strict ->
-          {:safe,
-           ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">|}
+      :xhtml10_strict ->
+        {:safe,
+         ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">|}
 
-        :xhtml10_transitional ->
-          {:safe,
-           ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">|}
+      :xhtml10_transitional ->
+        {:safe,
+         ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">|}
 
-        :xhtml10_frameset ->
-          {:safe,
-           ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">|}
+      :xhtml10_frameset ->
+        {:safe,
+         ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">|}
 
-        :xhtml11 ->
-          {:safe,
-           ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">|}
-      end
+      :xhtml11 ->
+        {:safe,
+         ~s|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">|}
     end
   end
 
