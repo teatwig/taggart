@@ -71,7 +71,7 @@ defmodule Taggart.HTML do
 
   """
   defmacro html_doctype(type \\ :html5) do
-    quote location: :keep do
+    quote location: :keep, generated: true do
       case unquote(type) do
         :html5 ->
           {:safe, "<!DOCTYPE html>"}
