@@ -52,6 +52,16 @@ defmodule TagsTest do
              span(class: "attr", id: "bar") |> safe_to_string
   end
 
+  test "with attributes passed as var" do
+    attrs = [class: "attr"]
+    assert "<div class=\"attr\"></div>" == div(attrs) |> safe_to_string
+    assert "<span class=\"attr\"></span>" == span(attrs) |> safe_to_string
+
+    attrs = [class: "attr", id: "bar"]
+    assert "<div class=\"attr\" id=\"bar\"></div>" == div(attrs) |> safe_to_string
+    assert "<span class=\"attr\" id=\"bar\"></span>" == span(attrs) |> safe_to_string
+  end
+
   test "with list attributes" do
     assert "<div class=\"one two\"></div>" == div(class: ["one", "two"]) |> safe_to_string
     assert "<span class=\"one two\"></span>" == span(class: ["one", "two"]) |> safe_to_string
@@ -95,6 +105,12 @@ defmodule TagsTest do
     assert "<span>content</span>" == span("content") |> safe_to_string
   end
 
+  test "with content passed as var" do
+    content = "content"
+    assert "<div>content</div>" == div(content) |> safe_to_string
+    assert "<span>content</span>" == span(content) |> safe_to_string
+  end
+
   test "with content as an arg, and attrs" do
     assert "<div class=\"foo\">content</div>" == div("content", class: "foo") |> safe_to_string
     assert "<span class=\"foo\">content</span>" == span("content", class: "foo") |> safe_to_string
@@ -104,6 +120,21 @@ defmodule TagsTest do
 
     assert "<span class=\"foo\" id=\"bar\">content</span>" ==
              span("content", class: "foo", id: "bar") |> safe_to_string
+  end
+
+  test "with content as an arg, and attrs, both as vars" do
+    content = "content"
+    attr = [class: "foo"]
+    assert "<div class=\"foo\">content</div>" == div(content, attr) |> safe_to_string
+    assert "<span class=\"foo\">content</span>" == span(content, attr) |> safe_to_string
+
+    attrs = Keyword.put(attr, :id, "bar")
+
+    assert "<div class=\"foo\" id=\"bar\">content</div>" ==
+             div(content, attrs) |> safe_to_string
+
+    assert "<span class=\"foo\" id=\"bar\">content</span>" ==
+             span(content, attrs) |> safe_to_string
   end
 
   test "with content as an arg, and do attrs" do

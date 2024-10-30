@@ -95,13 +95,31 @@ defmodule Taggart.Tags do
           ] do
       defmacro unquote(tag)(content_or_attrs \\ [])
 
+      # if called with a variable we have to unquote it to check if its attributes (list) or content
+      defmacro unquote(tag)({var_name, metadata, context} = content_or_attrs)
+               when is_atom(var_name) and is_list(metadata) and is_atom(context) do
+        # push tag down to next quote
+        tag = unquote(tag)
+
+        quote location: :keep do
+          {content, attrs} =
+            case unquote(content_or_attrs) do
+              attrs when is_list(attrs) -> Keyword.pop(attrs, :do, "")
+              content -> {content, []}
+            end
+
+          # since we're inside a quote we have to call content_tag directly
+          Taggart.Tags.content_tag(unquote(tag), attrs, content)
+        end
+      end
+
       defmacro unquote(tag)(attrs)
                when is_list(attrs) do
         # push tag down to next quote
         tag = unquote(tag)
         {content, attrs} = Keyword.pop(attrs, :do, "")
 
-        Taggart.Tags.normalized_call(tag, attrs, content)
+        Taggart.Tags.quoted_content_tag(tag, attrs, content)
       end
 
       defmacro unquote(tag)(content) do
@@ -109,7 +127,7 @@ defmodule Taggart.Tags do
         tag = unquote(tag)
         attrs = Macro.escape([])
 
-        Taggart.Tags.normalized_call(tag, attrs, content)
+        Taggart.Tags.quoted_content_tag(tag, attrs, content)
       end
 
       @doc """
@@ -140,40 +158,28 @@ defmodule Taggart.Tags do
                when not is_list(content) do
         tag = unquote(tag)
 
-        Taggart.Tags.normalized_call(tag, attrs, content)
+        Taggart.Tags.quoted_content_tag(tag, attrs, content)
       end
 
       # Main method
       defmacro unquote(tag)(attrs, do: content) do
         tag = unquote(tag)
 
-        content =
-          case content do
-            {:__block__, _, inner} -> inner
-            _ -> content
-          end
-
-        Taggart.Tags.content_tag(tag, attrs, content)
+        Taggart.Tags.quoted_content_tag(tag, attrs, content)
       end
 
       # Keep below the main method above, otherwise macro expansion loops forever
       defmacro unquote(tag)(content, attrs) when is_list(attrs) do
         tag = unquote(tag)
 
-        Taggart.Tags.normalized_call(tag, attrs, content)
+        Taggart.Tags.quoted_content_tag(tag, attrs, content)
       end
 
       # div/3
       defmacro unquote(tag)(_ignored, attrs, do: content) do
         tag = unquote(tag)
 
-        content =
-          case content do
-            {:__block__, _, inner} -> inner
-            _ -> content
-          end
-
-        Taggart.Tags.content_tag(tag, attrs, content)
+        Taggart.Tags.quoted_content_tag(tag, attrs, content)
       end
     end
   end
@@ -215,23 +221,23 @@ defmodule Taggart.Tags do
     end
   end
 
-  def normalized_call(tag, attrs, content) do
-    quote location: :keep do
-      unquote(tag)(unquote(attrs)) do
-        unquote(content)
+  def quoted_content_tag(tag, attrs, content) do
+    content =
+      case content do
+        {:__block__, _, inner} -> inner
+        _ -> content
       end
+
+    quote location: :keep do
+      Taggart.Tags.content_tag(unquote(tag), unquote(attrs), unquote(content))
     end
   end
 
   def content_tag(tag, attrs, content) do
-    quote location: :keep do
-      content = unquote(content)
-      {:safe, escaped} = Phoenix.HTML.html_escape(content)
+    {:safe, escaped} = Phoenix.HTML.html_escape(content)
 
-      name = to_string(unquote(tag))
-      attrs = unquote(attrs)
-      {:safe, [?<, name, Taggart.Tags.build_attrs(name, attrs), ?>, escaped, ?<, ?/, name, ?>]}
-    end
+    name = to_string(tag)
+    {:safe, [?<, name, Taggart.Tags.build_attrs(name, attrs), ?>, escaped, ?<, ?/, name, ?>]}
   end
 
   def build_attrs(_tag, []), do: []
