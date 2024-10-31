@@ -62,6 +62,28 @@ defmodule TagsTest do
     assert "<span class=\"attr\" id=\"bar\"></span>" == span(attrs) |> safe_to_string
   end
 
+  test "with empty attributes" do
+    assert "<div class></div>" == div(class: true) |> safe_to_string
+    assert "<span class></span>" == span(class: true) |> safe_to_string
+
+    assert "<div class id=\"bar\"></div>" ==
+             div(class: true, id: "bar") |> safe_to_string
+
+    assert "<span class id=\"bar\"></span>" ==
+             span(class: true, id: "bar") |> safe_to_string
+  end
+
+  test "with falsy (skipped) attributes" do
+    assert "<div></div>" == div(class: false) |> safe_to_string
+    assert "<span></span>" == span(class: nil) |> safe_to_string
+
+    assert "<div id=\"bar\"></div>" ==
+             div(class: nil, id: "bar") |> safe_to_string
+
+    assert "<span id=\"bar\"></span>" ==
+             span(class: false, id: "bar") |> safe_to_string
+  end
+
   test "with list attributes" do
     assert "<div class=\"one two\"></div>" == div(class: ["one", "two"]) |> safe_to_string
     assert "<span class=\"one two\"></span>" == span(class: ["one", "two"]) |> safe_to_string
