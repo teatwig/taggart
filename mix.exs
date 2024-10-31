@@ -46,7 +46,6 @@ defmodule Taggart.Mixfile do
   defp deps do
     [
       {:phoenix_html, "~> 4.1"},
-      {:phoenix_html_helpers, "~> 1.0"},
 
       # docs
       {:ex_doc, "~> 0.34.2", only: :dev, runtime: false},
@@ -57,6 +56,7 @@ defmodule Taggart.Mixfile do
 
       # dev/test
       {:phoenix, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:phoenix_html_helpers, "~> 1.0", only: [:dev, :test], runtime: false},
       {:phoenix_view, "~> 2.0", only: [:dev, :test], runtime: false},
       {:benchee, "~> 1.3.1", only: [:dev, :test], runtime: false},
       {:exprof, "~> 0.2.4", only: [:dev, :test], runtime: false},

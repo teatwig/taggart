@@ -108,8 +108,7 @@ defmodule Taggart.Tags do
               content -> {content, []}
             end
 
-          # since we're inside a quote we have to call content_tag directly
-          Taggart.Tags.content_tag(unquote(tag), attrs, content)
+          Taggart.Tags.build_tag(unquote(tag), attrs, content)
         end
       end
 
@@ -119,7 +118,7 @@ defmodule Taggart.Tags do
         tag = unquote(tag)
         {content, attrs} = Keyword.pop(attrs, :do, "")
 
-        Taggart.Tags.quoted_content_tag(tag, attrs, content)
+        Taggart.Tags.build_tag_quoted(tag, attrs, content)
       end
 
       defmacro unquote(tag)(content) do
@@ -127,7 +126,7 @@ defmodule Taggart.Tags do
         tag = unquote(tag)
         attrs = Macro.escape([])
 
-        Taggart.Tags.quoted_content_tag(tag, attrs, content)
+        Taggart.Tags.build_tag_quoted(tag, attrs, content)
       end
 
       @doc """
@@ -158,28 +157,28 @@ defmodule Taggart.Tags do
                when not is_list(content) do
         tag = unquote(tag)
 
-        Taggart.Tags.quoted_content_tag(tag, attrs, content)
+        Taggart.Tags.build_tag_quoted(tag, attrs, content)
       end
 
       # Main method
       defmacro unquote(tag)(attrs, do: content) do
         tag = unquote(tag)
 
-        Taggart.Tags.quoted_content_tag(tag, attrs, content)
+        Taggart.Tags.build_tag_quoted(tag, attrs, content)
       end
 
       # Keep below the main method above, otherwise macro expansion loops forever
       defmacro unquote(tag)(content, attrs) when is_list(attrs) do
         tag = unquote(tag)
 
-        Taggart.Tags.quoted_content_tag(tag, attrs, content)
+        Taggart.Tags.build_tag_quoted(tag, attrs, content)
       end
 
       # div/3
       defmacro unquote(tag)(_ignored, attrs, do: content) do
         tag = unquote(tag)
 
-        Taggart.Tags.quoted_content_tag(tag, attrs, content)
+        Taggart.Tags.build_tag_quoted(tag, attrs, content)
       end
     end
   end
@@ -215,13 +214,13 @@ defmodule Taggart.Tags do
         tag = unquote(tag)
 
         quote location: :keep do
-          PhoenixHTMLHelpers.Tag.tag(unquote(tag), unquote(attrs))
+          Taggart.Tags.build_tag(unquote(tag), unquote(attrs))
         end
       end
     end
   end
 
-  def quoted_content_tag(tag, attrs, content) do
+  def build_tag_quoted(tag, attrs, content) do
     content =
       case content do
         {:__block__, _, inner} -> inner
@@ -229,11 +228,16 @@ defmodule Taggart.Tags do
       end
 
     quote location: :keep do
-      Taggart.Tags.content_tag(unquote(tag), unquote(attrs), unquote(content))
+      Taggart.Tags.build_tag(unquote(tag), unquote(attrs), unquote(content))
     end
   end
 
-  def content_tag(tag, attrs, content) do
+  def build_tag(tag, attrs) do
+    name = to_string(tag)
+    {:safe, [?<, name, Taggart.Tags.build_attrs(name, attrs), ?>]}
+  end
+
+  def build_tag(tag, attrs, content) do
     {:safe, escaped} = Phoenix.HTML.html_escape(content)
 
     name = to_string(tag)
