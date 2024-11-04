@@ -174,7 +174,7 @@ defmodule Taggart.Tags do
         Taggart.Tags.build_tag_quoted(tag, attrs, content)
       end
 
-      # div/3
+      # three arg form to be used in rare cases where the one arg form cannot determine the correct type (content/attrs)
       defmacro unquote(tag)(_ignored, attrs, do: content) do
         tag = unquote(tag)
 

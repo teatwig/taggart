@@ -30,8 +30,7 @@ end
 
 ## Usage
 
-Taggart produce Phoenix-compatible "safe" html through underlying usage of the
-[`Phoenix.HTML.content_tag/2`](https://hexdocs.pm/phoenix_html/Phoenix.HTML.Tag.html#content_tag/2).
+Taggart produces Phoenix-compatible "safe" html by returning the same data as expected by [`Phoenix.HTML.safe_to_string/1`](https://hexdocs.pm/phoenix_html/Phoenix.HTML.html#safe_to_string/1).
 Since it just produces IO Lists, it should remain compatible with any
 other library that uses the same format.
 
@@ -231,50 +230,33 @@ The trade-off, however, is that because the macros inspect the arguements
 to determine `attr/content` placement, they do not play well with all kinds
 of ASTs.
 
-This will work:
+Taggart supports passing attributes as a keyword list stored in a variable, for example:
 
 ```elixir
-# works
-a = "foo"
-div(a)
+# this works!
+attrs = [id: "foo", class: "bar"]
+div(attrs)
 ```
 
-This will not:
-```elixir
-# do not try this at home
-a = [id: "foo", class: "bar"]
-div(a)
-```
-
-If you try this, you will get an error along the lines of
-`lists in Phoenix.HTML and templates may only contain integers 
-representing bytes, binaries or other list`. This is because we
-make the choice of assuming that a single, non-list argument
-(of which AST is) is content and not attrs.
-
-As a workaround, you can either use `Phoenix.HTML.content_tag`
-directly, or use the special three-argument version which
-ignores the first argument:
+But in the rare cases where this does not work you can try to use `PhoenixHTMLHelpers.content_tag`, or use the special three-argument version which ignores the first argument:
 
 ```elixir
-# try this
-a = [id: "foo", class: "bar"]
-div(nil, a) do "content" end
+attrs = [id: "foo", class: "bar"]
+div(nil, attrs) do "content" end
 ```
 
 ## Converting from HTML
 
-### PrestoChange.io
-
-You can use the online tool at [prestochange.io](http://www.prestochange.io).
-
 ### Install taggart escript using homebrew
+
+> [!NOTE]
+> This currently does not work because homebrew removed `rebar` and the tap hasn't been updated yet.
 
 ```sh
 brew install ijcd/tap/taggart
 ```
 
-```elixir
+```
 Reads HTML from stdin and writes Taggart to stdout.
 
 Usage:
