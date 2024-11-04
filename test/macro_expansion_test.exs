@@ -4,7 +4,7 @@ defmodule MacroExpansionTest do
 
   defmacrop content_tag_ast(params) do
     quote do
-      {{:., _, [{:__aliases__, _, [:Taggart, :Tags]}, :build_tag]}, _metadata, unquote(params)}
+      {{:., _, [{:__aliases__, _, [:Taggart, :Tags]}, :build_tag]}, _, unquote(params)}
     end
   end
 
