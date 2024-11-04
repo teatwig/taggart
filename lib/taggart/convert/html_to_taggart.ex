@@ -1,4 +1,8 @@
 defmodule Taggart.Convert.HTMLToTaggart do
+  @moduledoc """
+  Convert HTML to Taggart.
+  """
+
   use Taggart.HTML
   alias Inspect.Algebra, as: IA
 

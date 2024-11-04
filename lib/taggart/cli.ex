@@ -65,7 +65,7 @@ defmodule Taggart.CLI do
           end
       end
 
-    IO.read(:all)
+    IO.read(:eof)
     |> HTMLToTaggart.html_to_taggart(indent)
     |> IO.puts()
   end
