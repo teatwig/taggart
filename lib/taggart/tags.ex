@@ -101,7 +101,7 @@ defmodule Taggart.Tags do
         # push tag down to next quote
         tag = unquote(tag)
 
-        quote location: :keep do
+        quote location: :keep, generated: true do
           {content, attrs} =
             case unquote(content_or_attrs) do
               attrs when is_list(attrs) -> Keyword.pop(attrs, :do, "")
