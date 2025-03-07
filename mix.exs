@@ -1,4 +1,4 @@
-defmodule Taggart.Mixfile do
+defmodule Taggart.MixProject do
   use Mix.Project
 
   @version "0.1.5"
