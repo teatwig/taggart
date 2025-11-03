@@ -30,7 +30,7 @@ end
 
 ## Usage
 
-Taggart produces Phoenix-compatible "safe" html by returning the same data as expected by [`Phoenix.HTML.safe_to_string/1`](https://hexdocs.pm/phoenix_html/Phoenix.HTML.html#safe_to_string/1).
+Taggart produces Phoenix-compatible "safe" HTML by returning the same data as expected by [`Phoenix.HTML.safe_to_string/1`](https://hexdocs.pm/phoenix_html/Phoenix.HTML.html#safe_to_string/1).
 Since it just produces IO Lists, it should remain compatible with any
 other library that uses the same format.
 
@@ -216,7 +216,7 @@ div do
 end
 ```
 
-The alternative would be forcing the use of actual lists, which is necessairly noisier.
+The alternative would be forcing the use of actual lists, which is necessarily noisier.
 
 ```elixir
 # Not valid, do not try:
@@ -226,7 +226,7 @@ div [
 ]
 ```
 
-The trade-off, however, is that because the macros inspect the arguements
+The trade-off, however, is that because the macros inspect the arguments
 to determine `attr/content` placement, they do not play well with all kinds
 of ASTs.
 
